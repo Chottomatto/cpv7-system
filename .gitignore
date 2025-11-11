@@ -58,5 +58,3 @@ debug/
 *.model
 ml/models/
 
-# Training data
-training_data/
