@@ -43,6 +43,10 @@ example:
 pip install tensorflow (pwede sugpunon sila as long may space kada next dependency)
 
 
+
+
+
+
 Paano mag run sng system?
 
 1. ubra .env file sa root sng system, tas sa sulod sng .env:
@@ -57,6 +61,9 @@ Paano mag run sng system?
     >sample sang connection string: psql 'postgresql://neondb_owner:npg_ZQkhAex6i2SD@ep-divine-silence-a18dz5k2-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
     > i copy lang ang ari: postgresql://neondb_owner:npg_ZQkhAex6i2SD@ep-divine-silence-a18dz5k2-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
     >paste sa .env file
+
+1b. ubra sng ml folder sa root sng system, tas sa sulod ya ubra pagid ubra sng models nga folder.
+    dri ni masulod ang i train naton nga ml
 
 
 2. train ang ml (run sa terminal)
