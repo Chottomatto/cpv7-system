@@ -55,6 +55,6 @@ debug/
 *.pkl
 *.pickle
 *.joblib
-*.model
+
 
 
