@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG 4: Quality Education - Academic Article Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <img src="{{ url_for('static', filename='icons/sdg4_icon.png') }}" alt="SDG 4 Icon" class="header-logo">
+        <h1 class="header-title">SDG 4: Quality Education</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search for articles... ">
+                    <button onclick="searchArticles()">Search</button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section">
+                <h2>Search Results</h2>
+                <div id="resultsContainer" class="results-container">
+                    <div class="placeholder">
+                        <p>Enter search terms above to find articles</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination" style="display: none;">
+                <button id="prevBtn" onclick="loadMore(-1)">Previous</button>
+                <span id="pageInfo">Page 1</span>
+                <button id="nextBtn" onclick="loadMore(1)">Next</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentPage = 1;
+        let currentQuery = '';
+
+        function searchArticles() {
+            const query = document.getElementById('searchInput').value.trim();
+            const resultsContainer = document.getElementById('resultsContainer');
+            const pagination = document.getElementById('pagination');
+            
+            if (!query) {
+                resultsContainer.innerHTML = '<div class="placeholder"><p>Please enter a search term</p></div>';
+                pagination.style.display = 'none';
+                return;
+            }
+
+            currentQuery = query;
+            currentPage = 1;
+
+            // Show loading state
+            resultsContainer.innerHTML = '<div class="placeholder"><p>Searching...</p></div>';
+
+            // Properly encode the query for URL
+            const encodedQuery = encodeURIComponent(query);
+            
+            fetch(`/api/search?q=${encodedQuery}&limit=20`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        resultsContainer.innerHTML = `<div class="error"><p>Error: ${data.error}</p></div>`;
+                        return;
+                    }
+
+                    displayResults(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    resultsContainer.innerHTML = '<div class="error"><p>Error searching articles. Please try again.</p></div>';
+                });
+        }
+
+        function displayResults(data) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const pagination = document.getElementById('pagination');
+
+            if (data.count === 0 || !data.results || data.results.length === 0) {
+                resultsContainer.innerHTML = '<div class="placeholder"><p>No articles found matching your search</p></div>';
+                pagination.style.display = 'none';
+                return;
+            }
+
+            let html = '';
+            data.results.forEach(article => {
+                const categories = article.categories ? Object.entries(article.categories)
+                    .filter(([cat, score]) => score > 0.3)
+                    .map(([cat, score]) => `${cat} (${(score * 100).toFixed(1)}%)`)
+                    .join(', ') : 'None';
+                
+                html += `
+                    <div class="article-card">
+                        <h3><a href="${article.url}" target="_blank" rel="noopener">${article.title || 'No Title'}</a></h3>
+                        <p class="article-content">${article.content ? article.content.substring(0, 300) + '...' : 'No content available'}</p>
+                        <div class="article-meta">
+                            ${article.author ? `<span class="author">By: ${article.author}</span>` : ''}
+                            <span class="categories">Categories: ${categories}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            resultsContainer.innerHTML = html;
+            
+            // Show pagination if there are more results
+            if (data.count > 20) {
+                pagination.style.display = 'flex';
+                updatePaginationInfo();
+            } else {
+                pagination.style.display = 'none';
+            }
+        }
+
+        function loadMore(direction) {
+            currentPage += direction;
+            if (currentPage < 1) currentPage = 1;
+            
+            const offset = (currentPage - 1) * 20;
+            const encodedQuery = encodeURIComponent(currentQuery);
+            
+            // Use the search endpoint with the current query for pagination
+            fetch(`/api/search?q=${encodedQuery}&limit=20&offset=${offset}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        console.error('API Error:', data.error);
+                        return;
+                    }
+                    displayResults(data);
+                    updatePaginationInfo();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function updatePaginationInfo() {
+            document.getElementById('pageInfo').textContent = `Page ${currentPage}`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+        }
+
+        // Initialize
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchArticles();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+tensorflow
+numpy
+pandas
+scikit-learn
+flask
+python-dotenv
+requests
+beautifulsoup4
+trafilatura
+sqlalchemy
+psycopg2-binary
+keras-preprocessing
+
+
+
+
