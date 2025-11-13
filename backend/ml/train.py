@@ -94,7 +94,7 @@ def train_classification_model():
         X_train, X_temp, Y_train, Y_temp = train_test_split(
             padded_sequences, 
             Y, 
-            test_size=0.2,
+            test_size=0.7,
             random_state=42,
             shuffle=True
         )
@@ -103,7 +103,7 @@ def train_classification_model():
         X_val, X_test, Y_val, Y_test = train_test_split(
             X_temp, 
             Y_temp, 
-            test_size=0.2,
+            test_size=0.3,
             random_state=42,
             shuffle=True
         )
