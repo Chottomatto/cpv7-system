@@ -103,7 +103,7 @@ def train_classification_model():
         X_val, X_test, Y_val, Y_test = train_test_split(
             X_temp, 
             Y_temp, 
-            test_size=0.7,
+            test_size=0.2,
             random_state=42,
             shuffle=True
         )
@@ -142,31 +142,34 @@ def train_classification_model():
             verbose=1
         )
 
+
         # --- 6. EVALUATION ---
         logger.info("\nEvaluating on Test Set...")
-        loss, acc, prec, recall = model.evaluate(X_test, Y_test, verbose=0)
+        # Unpack all four returned values
+        loss, acc, prec, recall = model.evaluate(X_test, Y_test, verbose=0) 
+
+        # Calculate Error Rate
+        error_rate = 1.0 - acc 
+
         logger.info(f"Test Loss: {loss:.4f}, Test Accuracy: {acc:.4f}")
+        # Log the calculated error rate
+        logger.info(f"Test Error Rate: {error_rate * 100:.2f}%") 
         logger.info(f"Test Precision: {prec:.4f}, Test Recall: {recall:.4f}")
 
         # Generate predictions and classification report
         y_pred_proba = model.predict(X_test)
-        # Threshold predictions at Config.CLASSIFICATION_THRESHOLD
+        
         y_pred = (y_pred_proba > Config.CLASSIFICATION_THRESHOLD).astype(int) 
 
         report = classification_report(Y_test, y_pred, target_names=CATEGORIES, zero_division=0)
         logger.info("Classification Report:\n" + report + "\n")
         
-        mcm = multilabel_confusion_matrix(Y_test, y_pred)
-        logger.info("Confusion Matrices (one per class):")
-        for i, category in enumerate(CATEGORIES):
-            logger.info(f"--- {category} ---")
-            logger.info("  [[TN  FP]")
-            logger.info(f"   [FN  TP]] = \n{mcm[i]}\n")
-            
-        # --- 7. SAVE MODEL AND TOKENIZER ---
+        mcm = multilabel_confusion_matrix(Y_test, y_pred)        
         model_save_dir = os.path.join(project_root, Config.MODEL_PATH)
         os.makedirs(model_save_dir, exist_ok=True)
         
+
+        # --- 7. SAVE MODEL AND TOKENIZER ---
         model.save(os.path.join(model_save_dir, "classification_nn_model.keras")) 
         joblib.dump(tokenizer, os.path.join(model_save_dir, "classification_tokenizer.pkl")) 
 
