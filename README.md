@@ -115,3 +115,7 @@ i identify nyu lang kung diin nga metrics ang pwede maclassify (ignore lang ang 
     'public_resource', 'public_events', 'vocational_training',
     'education_outreach', 'access_policy'
 ]
+
+
+> training_data/classification_training_data.csv
+(ang mga classes i adjust nyu based kung ano sa inyu nga config.py (ang configuration_weight))
