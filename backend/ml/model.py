@@ -17,11 +17,11 @@ class ArticleClassifier:
         
         # Must match MAX_LEN from train.py
         self.max_len = 300 
-        
         self.categories = [
             'public_resource', 'public_events', 'vocational_training',
             'education_outreach', 'access_policy'
         ]
+        
 
     def load_models(self):
         """Load trained models (NN classification and tokenizer) from disk."""
@@ -92,7 +92,6 @@ class ArticleClassifier:
                 weight = Config.CATEGORY_WEIGHTS.get(category, 0)
                 total_score += score * weight
                 
-        # Removed Score component 3: Entity relevance (from NER)
         
         # Ensure score is capped at 1.0
         return min(total_score, 1.0)

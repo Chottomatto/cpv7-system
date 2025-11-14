@@ -18,6 +18,9 @@ class Config:
     # ML Settings
     MODEL_PATH = "ml/models/"
     CLASSIFICATION_THRESHOLD = 0.75
+
+
+    #Guimaras keywords
     GUIMARAS_KEYWORDS = [
         "guimaras", "gsu", "guimaras state university", 
         "deped guimaras", "guimaras news", "buenavista",

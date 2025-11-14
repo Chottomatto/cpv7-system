@@ -26,6 +26,8 @@ logger = logging.getLogger(__name__)
 MAX_WORDS = 10000 
 MAX_LEN = 300 
 EMBEDDING_DIM = 100 
+
+
 CATEGORIES = [
     'public_resource', 'public_events', 'vocational_training',
     'education_outreach', 'access_policy'
@@ -94,7 +96,7 @@ def train_classification_model():
         X_train, X_temp, Y_train, Y_temp = train_test_split(
             padded_sequences, 
             Y, 
-            test_size=0.7,
+            test_size=0.3,
             random_state=42,
             shuffle=True
         )
@@ -103,7 +105,7 @@ def train_classification_model():
         X_val, X_test, Y_val, Y_test = train_test_split(
             X_temp, 
             Y_temp, 
-            test_size=0.3,
+            test_size=0.5,
             random_state=42,
             shuffle=True
         )

@@ -84,7 +84,7 @@ def start_ml_processing():
                 processed_data = classifier.process_article(article)
                 
                 # Only save articles that are successfully processed and scored
-                if processed_data and processed_data.get('total_score', 0) > 0.01:
+                if processed_data and processed_data.get('total_score', 0) > 0.03:
                     success = db_ops.save_processed_article(processed_data)
                     if success:
                         successful_processed += 1
