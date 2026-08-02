@@ -40,11 +40,11 @@ class Config:
     
     # Category weights for scoring
     CATEGORY_WEIGHTS = {
-        'public_resource': 0.05,
-        'public_events': 0.05, 
-        'vocational_training': 0.05,
-        'education_outreach': 0.05,
-        'access_policy': 0.068,
-        'teaching_qualifications': 0.154,
-        'first_generation_students': 0.308
+        'ethical_sourcing_policy': 0.048,
+        'policy_waste_disposal_hazardous_materials': 0.048, 
+        'policy_waste_disposal_landfill_policy': 0.048,
+        'policy_for_minimisation_of_plastic_use': 0.048,
+        'policy_for_minimisation_of_disposable_items': 0.048,
+        'disposable_policy': 0.0135,
+        'minimisation_policies_extended_to_suppliers': 0.0135
     }

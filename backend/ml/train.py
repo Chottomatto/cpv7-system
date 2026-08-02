@@ -29,8 +29,8 @@ EMBEDDING_DIM = 100
 
 
 CATEGORIES = [
-    'public_resource', 'public_events', 'vocational_training',
-    'education_outreach', 'access_policy'
+    'ethical_sourcing_policy', 'policy_waste_disposal_hazardous_materials', 'policy_waste_disposal_landfill_policy',
+    'policy_for_minimisation_of_plastic_use', 'policy_for_minimisation_of_disposable_items', 'disposable_policy', 'minimisation_policies_extended_to_suppliers'
 ]
 
 
